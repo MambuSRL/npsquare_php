@@ -12,12 +12,11 @@ declare(strict_types=1);
 namespace Mambusrl\npsquare_php;
 final class NPSquare {
 
-    private ?string $accessToken = null;
+    private string $access_token = "";
     private ?string $keyInstitution = null;
     private ?string $username = null;
     private ?string $password = null;
     private ?string $url = null;
-    private bool $access_token = false;
 
     public function __construct(string $keyInstitution = '', string $username = '', string $password = '', string $url = '') {
         $this->keyInstitution = $keyInstitution;
@@ -35,6 +34,7 @@ final class NPSquare {
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'PATCH',
@@ -59,17 +59,30 @@ final class NPSquare {
         }
     }
 
+    public function testConnection(): bool|string{
+        try{
+            $out = $this->connect();
+            if ($out === false){
+                return "Connection failed";
+            }
+            $this->disconnect();
+            return true;
+        } catch (\Exception $e) {
+            return "Connection failed: " . $e->getMessage();
+        }
+    }
+
     public function connect(): string{
         if (empty($this->keyInstitution)) 
             throw new \Exception("Missing key institution");
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => $this->url . '/token',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
@@ -91,6 +104,7 @@ final class NPSquare {
         switch ($code){
             case 200:
                 $this->access_token = json_decode($response)->access_token;
+                return $this->access_token;
             case 401:
                 throw new \Exception("Unauthorized");
             default:
@@ -109,11 +123,12 @@ final class NPSquare {
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer ' . $this->accessToken
+                'Authorization: Bearer ' . $this->access_token
             ),
         ));
 
@@ -149,11 +164,12 @@ final class NPSquare {
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer ' . $this->accessToken
+                'Authorization: Bearer ' . $this->access_token
             ),
         ));
 
@@ -190,13 +206,14 @@ final class NPSquare {
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS =>json_encode($doc->toArray()),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Bearer ' . $this->accessToken
+                'Authorization: Bearer ' . $this->access_token
             ),
         ));
 
