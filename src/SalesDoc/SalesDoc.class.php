@@ -9,8 +9,8 @@
  */
 declare(strict_types=1);
 
-namespace npsquare_php;
-class salesDoc {
+namespace Mambusrl\npsquare_php\SalesDoc;
+class SalesDoc {
     
     private string $type;
     private string $date;

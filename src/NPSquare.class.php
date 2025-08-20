@@ -9,8 +9,8 @@
  */
 declare(strict_types=1);
 
-namespace npsquare_php;
-final class NPSolution {
+namespace Mambusrl\npsquare_php;
+final class NPSquare {
 
     private ?string $accessToken = null;
     private ?string $keyIstitution = null;
@@ -123,7 +123,14 @@ final class NPSolution {
         curl_close($curl);
         switch ($code){
             case 200:
-                return json_decode($response)->items;
+                $data = json_decode($response, true);
+                $paymentMethods = [];
+                
+                foreach ($data['items'] as $item) {
+                    $paymentMethods[] = ReferenceData\PaymentMethods::fromArray($item);
+                }
+                
+                return $paymentMethods;
             case 401:
                 throw new \Exception("Unauthorized");
             default:
@@ -160,7 +167,7 @@ final class NPSolution {
                 $vatRates = [];
                 
                 foreach ($data['items'] as $item) {
-                    $vatRates[] = VatRates::fromArray($item);
+                    $vatRates[] = ReferenceData\VatRates::fromArray($item);
                 }
                 
                 return $vatRates;

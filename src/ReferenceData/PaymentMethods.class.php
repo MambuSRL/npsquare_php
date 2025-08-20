@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace npsquare_php;
+namespace Mambusrl\npsquare_php\ReferenceData;
 class PaymentMethods
 {
 
