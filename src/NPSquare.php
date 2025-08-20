@@ -13,14 +13,14 @@ namespace Mambusrl\npsquare_php;
 final class NPSquare {
 
     private ?string $accessToken = null;
-    private ?string $keyIstitution = null;
+    private ?string $keyInstitution = null;
     private ?string $username = null;
     private ?string $password = null;
     private ?string $url = null;
     private bool $access_token = false;
 
-    public function __construct(string $keyIstitution = '', string $username = '', string $password = '', string $url = '') {
-        $this->keyIstitution = $keyIstitution;
+    public function __construct(string $keyInstitution = '', string $username = '', string $password = '', string $url = '') {
+        $this->keyInstitution = $keyInstitution;
         $this->username = $username;
         $this->password = $password;
         $this->url = $url;
@@ -60,7 +60,7 @@ final class NPSquare {
     }
 
     public function connect(): string{
-        if (empty($this->keyIstitution)) 
+        if (empty($this->keyInstitution)) 
             throw new \Exception("Missing key institution");
         $curl = curl_init();
 
@@ -76,7 +76,7 @@ final class NPSquare {
             CURLOPT_POSTFIELDS => http_build_query(array(
                 'username' => $this->username,
                 'password' => $this->password,
-                'client_id' => $this->keyIstitution
+                'client_id' => $this->keyInstitution
             )),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded'
@@ -104,7 +104,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/reference-data/payment-methods?keyInstitution=' . $this->keyIstitution . '&page=1&size=100',
+            CURLOPT_URL => $this->url . '/reference-data/payment-methods?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -144,7 +144,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/reference-data/vat-rates?keyInstitution=' . $this->keyIstitution . '&page=1&size=100',
+            CURLOPT_URL => $this->url . '/reference-data/vat-rates?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -185,7 +185,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/documents/sales?keyInstitution='.$this->keyIstitution,
+            CURLOPT_URL => $this->url . '/documents/sales?keyInstitution='.$this->keyInstitution,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
