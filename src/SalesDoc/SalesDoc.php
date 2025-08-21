@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace Mambusrl\npsquare_php\SalesDoc;
 class SalesDoc {
     
-    private string $type;
-    private string $date;
-    private ?int $paymentId;
-    private ?int $paymentMethodId;
-    private array $productItems;
-    private Stakeholder $stakeholder;
+    private string $Type;
+    private string $Date;
+    private ?int $PaymentId;
+    private ?int $PaymentMethodId;
+    private array $ProductItems;
+    private Stakeholder $Stakeholder;
 
     public function __construct(array $data = []) {
         if (!empty($data)) {
@@ -27,15 +27,15 @@ class SalesDoc {
 
     // Metodo per creare l'oggetto da array/JSON
     public function fromArray(array $data): self {
-        $this->type = $data['Type'] ?? '';
-        $this->date = $data['Date'] ?? '';
-        $this->paymentId = $data['PaymentId'] ?? null;
-        $this->paymentMethodId = $data['PaymentMethodId'] ?? null;
-        $this->productItems = [];
+        $this->Type = $data['Type'] ?? '';
+        $this->Date = $data['Date'] ?? '';
+        $this->PaymentId = $data['PaymentId'] ?? null;
+        $this->PaymentMethodId = $data['PaymentMethodId'] ?? null;
+        $this->ProductItems = [];
         foreach($data["ProductItems"] as $item) {
-            $this->productItems[] = ProductItem::fromArray($item);
+            $this->ProductItems[] = ProductItem::fromArray($item);
         }
-        $this->stakeholder = Stakeholder::fromArray($data["Stakeholder"]);
+        $this->Stakeholder = Stakeholder::fromArray($data["Stakeholder"]);
         return $this;
     }
 
@@ -52,16 +52,16 @@ class SalesDoc {
     // Metodo per convertire l'oggetto in array
     public function toArray(): array {
         $productItemsArray = [];
-        foreach ($this->productItems as $item) {
+        foreach ($this->ProductItems as $item) {
             $productItemsArray[] = $item->toArray();
         }
         return [
-            'Type' => $this->type,
-            'Date' => $this->date,
-            'PaymentId' => $this->paymentId,
-            'PaymentMethodId' => $this->paymentMethodId,
+            'Type' => $this->Type,
+            'Date' => $this->Date,
+            'PaymentId' => $this->PaymentId,
+            'PaymentMethodId' => $this->PaymentMethodId,
             'ProductItems' => $productItemsArray,
-            'Stakeholder' => $this->stakeholder->toArray()
+            'Stakeholder' => $this->Stakeholder->toArray()
         ];
     }
 
@@ -72,67 +72,67 @@ class SalesDoc {
 
     // Getter e Setter per Type
     public function getType(): string {
-        return $this->type;
+        return $this->Type;
     }
 
     public function setType(string $type): self {
-        $this->type = $type;
+        $this->Type = $type;
         return $this;
     }
 
     // Getter e Setter per Date
     public function getDate(): string {
-        return $this->date;
+        return $this->Date;
     }
 
     public function setDate(string $date): self {
-        $this->date = $date;
+        $this->Date = $date;
         return $this;
     }
 
     // Getter e Setter per PaymentId
     public function getPaymentId(): ?int {
-        return $this->paymentId;
+        return $this->PaymentId;
     }
 
-    public function setPaymentId(?int $paymentId): self {
-        $this->paymentId = $paymentId;
+    public function setPaymentId(?int $PaymentId): self {
+        $this->PaymentId = $PaymentId;
         return $this;
     }
 
     // Getter e Setter per PaymentMethodId
     public function getPaymentMethodId(): ?int {
-        return $this->paymentMethodId;
+        return $this->PaymentMethodId;
     }
 
-    public function setPaymentMethodId(?int $paymentMethodId): self {
-        $this->paymentMethodId = $paymentMethodId;
+    public function setPaymentMethodId(?int $PaymentMethodId): self {
+        $this->PaymentMethodId = $PaymentMethodId;
         return $this;
     }
 
     // Getter e Setter per ProductItems
     public function getProductItems(): array {
-        return $this->productItems;
+        return $this->ProductItems;
     }
 
-    public function setProductItems(array $productItems): self {
-        $this->productItems = $productItems;
+    public function setProductItems(array $ProductItems): self {
+        $this->ProductItems = $ProductItems;
         return $this;
     }
 
     // Metodo per aggiungere un prodotto
-    public function addProductItem(ProductItem $productItem): self {
-        $this->productItems[] = $productItem;
+    public function addProductItem(ProductItem $ProductItem): self {
+        $this->ProductItems[] = $ProductItem;
         return $this;
     }
 
     // Getter e Setter per Stakeholder
     public function getStakeholder(): Stakeholder {
-        return $this->stakeholder;
+        return $this->Stakeholder;
     }
 
-    public function setStakeholder(Stakeholder $stakeholder): self {
-        $this->stakeholder = $stakeholder;
+    public function setStakeholder(Stakeholder $Stakeholder): self {
+        $this->Stakeholder = $Stakeholder;
         return $this;
     }
 
@@ -140,21 +140,21 @@ class SalesDoc {
     public function validate(): array {
         $errors = [];
 
-        if (empty($this->type)) {
+        if (empty($this->Type)) {
             $errors[] = 'Type is required';
         }
 
-        if (empty($this->date)) {
+        if (empty($this->Date)) {
             $errors[] = 'Date is required';
-        } elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->date)) {
+        } elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->Date)) {
             $errors[] = 'Date must be in YYYY-MM-DD format';
         }
 
-        if (empty($this->productItems)) {
+        if (empty($this->ProductItems)) {
             $errors[] = 'At least one product item is required';
         }
 
-        if (is_null($this->stakeholder)) {
+        if (is_null($this->Stakeholder)) {
             $errors[] = 'Stakeholder is required';
         }
 

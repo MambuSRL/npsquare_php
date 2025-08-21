@@ -194,7 +194,7 @@ final class NPSquare {
         }
     }
 
-    public function sendSalesDoc(salesDoc $doc){
+    public function sendSalesDoc(SalesDoc\SalesDoc $doc){
         if (empty($this->access_token)) 
             throw new \Exception("Missing access token");
 
@@ -223,6 +223,7 @@ final class NPSquare {
 
         switch ($code) {
             case 200:
+            case 201:
                 return json_decode($response);
             case 401:
                 throw new \Exception("Unauthorized");
