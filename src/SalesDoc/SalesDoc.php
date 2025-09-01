@@ -47,7 +47,9 @@ class SalesDoc {
             $this->ProductItems[] = ProductItem::fromArray($item);
         }
         $this->Stakeholder = Stakeholder::fromArray($data["Stakeholder"]);
-        $this->DatiOrdineAcquisto = DatiAggiuntiviFatturazione::fromArray($data["DatiOrdineAcquisto"]);
+        $this->DatiOrdineAcquisto = is_null($data["DatiOrdineAcquisto"]) ? null : DatiAggiuntiviFatturazione::fromArray($data["DatiOrdineAcquisto"]);
+        $this->DatiContratto = is_null($data["DatiContratto"]) ? null : DatiAggiuntiviFatturazione::fromArray($data["DatiContratto"]);
+        $this->DatiConvenzione = is_null($data["DatiConvenzione"]) ? null : DatiAggiuntiviFatturazione::fromArray($data["DatiConvenzione"]);
         $this->Attachments = $data["Attachments"] ?? [];
         return $this;
     }
