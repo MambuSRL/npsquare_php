@@ -8,7 +8,7 @@ final class Attachment
     private string $filename;
     private string $contentBase64;
 
-    private function __construct(string $filename, string $contentBase64)
+    public function __construct(string $filename, string $contentBase64)
     {
         if ($filename === '') {
             throw new \InvalidArgumentException('filename richiesto');
