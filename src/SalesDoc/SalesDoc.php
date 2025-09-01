@@ -16,8 +16,12 @@ class SalesDoc {
     private string $Date;
     private ?int $PaymentId;
     private ?int $PaymentMethodId;
+    private ?float $StampDutyAmount;
+    private ?string $Notes;
+    private bool $IsPaid = false;
     private array $ProductItems;
     private Stakeholder $Stakeholder;
+    private array $Attachments;
 
     public function __construct(array $data = []) {
         if (!empty($data)) {
@@ -29,6 +33,9 @@ class SalesDoc {
     public function fromArray(array $data): self {
         $this->Type = $data['Type'] ?? '';
         $this->Date = $data['Date'] ?? '';
+        $this->StampDutyAmount = $data['StampDutyAmount'] ?? null;
+        $this->Notes = $data['Notes'] ?? null;
+        $this->IsPaid = $data['IsPaid'] ?? false;
         $this->PaymentId = $data['PaymentId'] ?? null;
         $this->PaymentMethodId = $data['PaymentMethodId'] ?? null;
         $this->ProductItems = [];
@@ -36,6 +43,7 @@ class SalesDoc {
             $this->ProductItems[] = ProductItem::fromArray($item);
         }
         $this->Stakeholder = Stakeholder::fromArray($data["Stakeholder"]);
+        $this->Attachments = $data["Attachments"] ?? [];
         return $this;
     }
 
@@ -58,10 +66,14 @@ class SalesDoc {
         return [
             'Type' => $this->Type,
             'Date' => $this->Date,
+            'StampDutyAmount' => $this->StampDutyAmount,
+            'Notes' => $this->Notes,
+            'IsPaid' => $this->IsPaid,
             'PaymentId' => $this->PaymentId,
             'PaymentMethodId' => $this->PaymentMethodId,
             'ProductItems' => $productItemsArray,
-            'Stakeholder' => $this->Stakeholder->toArray()
+            'Stakeholder' => $this->Stakeholder->toArray(),
+            'Attachments' => $this->Attachments
         ];
     }
 
@@ -87,6 +99,46 @@ class SalesDoc {
 
     public function setDate(string $date): self {
         $this->Date = $date;
+        return $this;
+    }
+
+    // Getter e Setter per IsPaid
+    public function getIsPaid(): bool {
+        return $this->IsPaid;
+    }
+
+    public function setIsPaid(bool $IsPaid): self {
+        $this->IsPaid = $IsPaid;
+        return $this;
+    }
+
+    //Getter e Setter per StampDutyAmount
+    public function getStampDutyAmount(): ?float {
+        return $this->StampDutyAmount;
+    }
+
+    public function setStampDutyAmount(?float $StampDutyAmount): self {
+        $this->StampDutyAmount = $StampDutyAmount;
+        return $this;
+    }
+
+    //Getter e Setter per Notes
+    public function getNotes(): ?string {
+        return $this->Notes;
+    }
+
+    public function setNotes(?string $Notes): self {
+        $this->Notes = $Notes;
+        return $this;
+    }
+
+    // Getter e Setter per Attachments
+    public function getAttachments(): array {
+        return $this->Attachments;
+    }
+
+    public function setAttachments(array $Attachments): self {
+        $this->Attachments = $Attachments;
         return $this;
     }
 
