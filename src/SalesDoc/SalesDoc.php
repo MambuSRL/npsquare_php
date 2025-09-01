@@ -21,6 +21,10 @@ class SalesDoc {
     private bool $IsPaid = false;
     private array $ProductItems;
     private Stakeholder $Stakeholder;
+    private DatiAggiuntiviFatturazione $DatiOrdineAcquisto;
+    private DatiAggiuntiviFatturazione $DatiContratto;
+    private DatiAggiuntiviFatturazione $DatiConvenzione;
+    private DatiAggiuntiviFatturazione $DatiFattureCollegate;
     private array $Attachments;
 
     public function __construct(array $data = []) {
@@ -43,6 +47,7 @@ class SalesDoc {
             $this->ProductItems[] = ProductItem::fromArray($item);
         }
         $this->Stakeholder = Stakeholder::fromArray($data["Stakeholder"]);
+        $this->DatiOrdineAcquisto = DatiAggiuntiviFatturazione::fromArray($data["DatiOrdineAcquisto"]);
         $this->Attachments = $data["Attachments"] ?? [];
         return $this;
     }
@@ -73,7 +78,8 @@ class SalesDoc {
             'PaymentMethodId' => $this->PaymentMethodId,
             'ProductItems' => $productItemsArray,
             'Stakeholder' => $this->Stakeholder->toArray(),
-            'Attachments' => $this->Attachments
+            'Attachments' => $this->Attachments,
+            'DatiOrdineAcquisto' => $this->DatiOrdineAcquisto->toArray()
         ];
     }
 
@@ -185,6 +191,16 @@ class SalesDoc {
 
     public function setStakeholder(Stakeholder $Stakeholder): self {
         $this->Stakeholder = $Stakeholder;
+        return $this;
+    }
+
+    // Getter e Setter per DatiOrdineAcquisto
+    public function getDatiOrdineAcquisto(): DatiAggiuntiviFatturazione {
+        return $this->DatiOrdineAcquisto;
+    }
+
+    public function setDatiOrdineAcquisto(DatiAggiuntiviFatturazione $DatiOrdineAcquisto): self {
+        $this->DatiOrdineAcquisto = $DatiOrdineAcquisto;
         return $this;
     }
 
