@@ -19,6 +19,9 @@ class ProductItem {
     private float $productDiscount;
     private ?string $codiceSottoconto;
     private ?string $codiceCentroRicavo;
+    private ?string $effectiveData;
+    private ?string $codiceArticolo;
+    private ?AltriDatiGestionali $altriDatiGestionali;
 
     public function __construct(
         int $productQuantity = 1,
@@ -27,7 +30,10 @@ class ProductItem {
         string $productVatRateCode = '',
         float $productDiscount = 0.0,
         ?string $codiceSottoconto = null,
-        ?string $codiceCentroRicavo = null
+        ?string $codiceCentroRicavo = null,
+        ?string $effectiveData = null,
+        ?string $codiceArticolo = null,
+        ?AltriDatiGestionali $altriDatiGestionali = null
     ) {
         $this->productQuantity = $productQuantity;
         $this->productDescription = $productDescription;
@@ -36,6 +42,9 @@ class ProductItem {
         $this->productDiscount = $productDiscount;
         $this->codiceSottoconto = $codiceSottoconto;
         $this->codiceCentroRicavo = $codiceCentroRicavo;
+        $this->effectiveData = $effectiveData;
+        $this->codiceArticolo = $codiceArticolo;
+        $this->altriDatiGestionali = $altriDatiGestionali;
     }
 
     // Metodo statico per creare l'oggetto da array/JSON
@@ -47,18 +56,11 @@ class ProductItem {
             $data['ProductVatRateCode'] ?? '',
             $data['ProductDiscount'] ?? 0.0,
             $data['CodiceSottoconto'] ?? null,
-            $data['CodiceCentroRicavo'] ?? null
+            $data['CodiceCentroRicavo'] ?? null,
+            $data['EffectiveData'] ?? null,
+            $data['CodiceArticolo'] ?? null,
+            isset($data['AltriDatiGestionali']) && is_array($data['AltriDatiGestionali']) ? AltriDatiGestionali::fromArray($data['AltriDatiGestionali']) : null
         );
-    }
-
-    // Metodo statico per creare l'oggetto da JSON string
-    public static function fromJson(string $json): self {
-        $data = json_decode($json, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \InvalidArgumentException('Invalid JSON: ' . json_last_error_msg());
-        }
-        
-        return self::fromArray($data);
     }
 
     // Metodo per convertire l'oggetto in array
@@ -70,7 +72,10 @@ class ProductItem {
             'ProductVatRateCode' => $this->productVatRateCode,
             'ProductDiscount' => $this->productDiscount,
             'CodiceSottoconto' => $this->codiceSottoconto,
-            'CodiceCentroRicavo' => $this->codiceCentroRicavo
+            'CodiceCentroRicavo' => $this->codiceCentroRicavo,
+            'EffectiveData' => $this->effectiveData,
+            'CodiceArticolo' => $this->codiceArticolo,
+            'AltriDatiGestionali' => $this->altriDatiGestionali ? $this->altriDatiGestionali->toArray() : null
         ];
     }
 
@@ -149,6 +154,36 @@ class ProductItem {
         return $this;
     }
 
+    // Getter e Setter per EffectiveData
+    public function getEffectiveData(): ?string {
+        return $this->effectiveData;
+    }
+
+    public function setEffectiveData(?string $effectiveData): self {
+        $this->effectiveData = $effectiveData;
+        return $this;
+    }
+
+    // Getter e Setter per CodiceArticolo
+    public function getCodiceArticolo(): ?string {
+        return $this->codiceArticolo;
+    }
+
+    public function setCodiceArticolo(?string $codiceArticolo): self {
+        $this->codiceArticolo = $codiceArticolo;
+        return $this;
+    }
+
+    // Getter e Setter per AltriDatiGesionali
+    public function getAltriDatiGesionali(): ?AltriDatiGestionali {
+        return $this->altriDatiGestionali;
+    }
+
+    public function setAltriDatiGesionali(?AltriDatiGestionali $altriDatiGesionali): self {
+        $this->altriDatiGestionali = $altriDatiGesionali;
+        return $this;
+    }
+
     // Metodi di calcolo
     public function getTotalPrice(): float {
         return $this->unitProductPrice * $this->productQuantity;
@@ -165,7 +200,6 @@ class ProductItem {
     // Metodo per validare i dati
     public function validate(): array {
         $errors = [];
-
         if ($this->productQuantity <= 0) {
             $errors[] = 'ProductQuantity must be greater than 0';
         }
@@ -185,7 +219,6 @@ class ProductItem {
         if ($this->productDiscount < 0 || $this->productDiscount > 100) {
             $errors[] = 'ProductDiscount must be between 0 and 100';
         }
-
         return $errors;
     }
 
