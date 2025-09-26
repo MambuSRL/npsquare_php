@@ -28,6 +28,11 @@ class SalesDoc {
     private ?array $Attachments;
 
     public function __construct(array $data = []) {
+        // Inizializzare le proprietà obbligatorie
+        $this->Type = '';
+        $this->Date = '';
+        $this->ProductItems = [];
+        
         if (!empty($data)) {
             $this->fromArray($data);
         }
@@ -42,15 +47,47 @@ class SalesDoc {
         $this->IsPaid = $data['IsPaid'] ?? false;
         $this->PaymentId = $data['PaymentId'] ?? null;
         $this->PaymentMethodId = $data['PaymentMethodId'] ?? null;
+        
+        // Gestire ProductItems che potrebbe non esistere o essere vuoto
         $this->ProductItems = [];
-        foreach($data["ProductItems"] as $item) {
-            $this->ProductItems[] = ProductItem::fromArray($item);
+        if (isset($data["ProductItems"]) && is_array($data["ProductItems"])) {
+            foreach($data["ProductItems"] as $item) {
+                $this->ProductItems[] = ProductItem::fromArray($item);
+            }
         }
-        $this->Stakeholder = Stakeholder::fromArray($data["Stakeholder"]);
-        $this->DatiOrdineAcquisto = is_null($data["DatiOrdineAcquisto"]) ? null : DatiAggiuntiviFatturazione::fromArray($data["DatiOrdineAcquisto"]);
-        $this->DatiContratto = is_null($data["DatiContratto"]) ? null : DatiAggiuntiviFatturazione::fromArray($data["DatiContratto"]);
-        $this->DatiConvenzione = is_null($data["DatiConvenzione"]) ? null : DatiAggiuntiviFatturazione::fromArray($data["DatiConvenzione"]);
-        $this->Attachments = $data["Attachments"] ?? [];
+        
+        // Gestire Stakeholder che potrebbe non esistere
+        if (isset($data["Stakeholder"]) && is_array($data["Stakeholder"])) {
+            $this->Stakeholder = Stakeholder::fromArray($data["Stakeholder"]);
+        }
+        
+        // Gestire DatiOrdineAcquisto che potrebbe non esistere
+        $this->DatiOrdineAcquisto = null;
+        if (isset($data["DatiOrdineAcquisto"]) && !is_null($data["DatiOrdineAcquisto"]) && is_array($data["DatiOrdineAcquisto"])) {
+            $this->DatiOrdineAcquisto = DatiAggiuntiviFatturazione::fromArray($data["DatiOrdineAcquisto"]);
+        }
+        
+        // Gestire DatiContratto che potrebbe non esistere
+        $this->DatiContratto = null;
+        if (isset($data["DatiContratto"]) && !is_null($data["DatiContratto"]) && is_array($data["DatiContratto"])) {
+            $this->DatiContratto = DatiAggiuntiviFatturazione::fromArray($data["DatiContratto"]);
+        }
+        
+        // Gestire DatiConvenzione che potrebbe non esistere
+        $this->DatiConvenzione = null;
+        if (isset($data["DatiConvenzione"]) && !is_null($data["DatiConvenzione"]) && is_array($data["DatiConvenzione"])) {
+            $this->DatiConvenzione = DatiAggiuntiviFatturazione::fromArray($data["DatiConvenzione"]);
+        }
+        
+        // Gestire DatiFattureCollegate che potrebbe non esistere
+        $this->DatiFattureCollegate = null;
+        if (isset($data["DatiFattureCollegate"]) && !is_null($data["DatiFattureCollegate"]) && is_array($data["DatiFattureCollegate"])) {
+            $this->DatiFattureCollegate = DatiAggiuntiviFatturazione::fromArray($data["DatiFattureCollegate"]);
+        }
+        
+        // Gestire Attachments che potrebbe non esistere
+        $this->Attachments = isset($data["Attachments"]) && is_array($data["Attachments"]) ? $data["Attachments"] : null;
+        
         return $this;
     }
 
@@ -257,7 +294,8 @@ class SalesDoc {
             $errors[] = 'At least one product item is required';
         }
 
-        if (is_null($this->Stakeholder)) {
+        // Correggere il controllo di Stakeholder - ora può essere null
+        if (!isset($this->Stakeholder)) {
             $errors[] = 'Stakeholder is required';
         }
 
