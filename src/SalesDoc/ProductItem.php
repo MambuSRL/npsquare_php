@@ -15,24 +15,24 @@ class ProductItem {
     private int $productQuantity;
     private string $productDescription;
     private float $unitProductPrice;
-    private string $productVatRateCode;
+    private ?string $productVatRateCode;
     private float $productDiscount;
     private ?string $codiceSottoconto;
     private ?string $codiceCentroRicavo;
     private ?string $effectiveData;
-    private ?string $codiceArticolo;
+    private ?CodiceArticolo $codiceArticolo;
     private ?AltriDatiGestionali $altriDatiGestionali;
 
     public function __construct(
         int $productQuantity = 1,
         string $productDescription = '',
         float $unitProductPrice = 0.0,
-        string $productVatRateCode = '',
+        ?string $productVatRateCode = null,
         float $productDiscount = 0.0,
         ?string $codiceSottoconto = null,
         ?string $codiceCentroRicavo = null,
         ?string $effectiveData = null,
-        ?string $codiceArticolo = null,
+        ?CodiceArticolo $codiceArticolo = null, // CORREZIONE: da ?string a ?CodiceArticolo
         ?AltriDatiGestionali $altriDatiGestionali = null
     ) {
         $this->productQuantity = $productQuantity;
@@ -53,14 +53,24 @@ class ProductItem {
             $data['ProductQuantity'] ?? 1,
             $data['ProductDescription'] ?? '',
             $data['UnitProductPrice'] ?? 0.0,
-            $data['ProductVatRateCode'] ?? '',
+            $data['ProductVatRateCode'] ?? null,
             $data['ProductDiscount'] ?? 0.0,
             $data['CodiceSottoconto'] ?? null,
             $data['CodiceCentroRicavo'] ?? null,
             $data['EffectiveData'] ?? null,
-            $data['CodiceArticolo'] ?? null,
+            isset($data['CodiceArticolo']) && is_array($data['CodiceArticolo']) ? CodiceArticolo::fromArray($data['CodiceArticolo']) : null,
             isset($data['AltriDatiGestionali']) && is_array($data['AltriDatiGestionali']) ? AltriDatiGestionali::fromArray($data['AltriDatiGestionali']) : null
         );
+    }
+
+    // Metodo statico per creare l'oggetto da JSON string
+    public static function fromJson(string $json): self {
+        $data = json_decode($json, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \InvalidArgumentException('Invalid JSON: ' . json_last_error_msg());
+        }
+        
+        return self::fromArray($data);
     }
 
     // Metodo per convertire l'oggetto in array
@@ -74,7 +84,7 @@ class ProductItem {
             'CodiceSottoconto' => $this->codiceSottoconto,
             'CodiceCentroRicavo' => $this->codiceCentroRicavo,
             'EffectiveData' => $this->effectiveData,
-            'CodiceArticolo' => $this->codiceArticolo,
+            'CodiceArticolo' => $this->codiceArticolo ? $this->codiceArticolo->toArray() : null,
             'AltriDatiGestionali' => $this->altriDatiGestionali ? $this->altriDatiGestionali->toArray() : null
         ];
     }
@@ -115,11 +125,11 @@ class ProductItem {
     }
 
     // Getter e Setter per ProductVatRateCode
-    public function getProductVatRateCode(): string {
+    public function getProductVatRateCode(): ?string {
         return $this->productVatRateCode;
     }
 
-    public function setProductVatRateCode(string $productVatRateCode): self {
+    public function setProductVatRateCode(?string $productVatRateCode): self {
         $this->productVatRateCode = $productVatRateCode;
         return $this;
     }
@@ -164,23 +174,23 @@ class ProductItem {
         return $this;
     }
 
-    // Getter e Setter per CodiceArticolo
-    public function getCodiceArticolo(): ?string {
+    // Getter e Setter per CodiceArticolo - CORREZIONE dei tipi
+    public function getCodiceArticolo(): ?CodiceArticolo {
         return $this->codiceArticolo;
     }
 
-    public function setCodiceArticolo(?string $codiceArticolo): self {
+    public function setCodiceArticolo(?CodiceArticolo $codiceArticolo): self {
         $this->codiceArticolo = $codiceArticolo;
         return $this;
     }
 
-    // Getter e Setter per AltriDatiGesionali
-    public function getAltriDatiGesionali(): ?AltriDatiGestionali {
+    // Getter e Setter per AltriDatiGestionali
+    public function getAltriDatiGestionali(): ?AltriDatiGestionali {
         return $this->altriDatiGestionali;
     }
 
-    public function setAltriDatiGesionali(?AltriDatiGestionali $altriDatiGesionali): self {
-        $this->altriDatiGestionali = $altriDatiGesionali;
+    public function setAltriDatiGestionali(?AltriDatiGestionali $altriDatiGestionali): self {
+        $this->altriDatiGestionali = $altriDatiGestionali;
         return $this;
     }
 
@@ -210,10 +220,6 @@ class ProductItem {
 
         if ($this->unitProductPrice < 0) {
             $errors[] = 'UnitProductPrice cannot be negative';
-        }
-
-        if (empty($this->productVatRateCode)) {
-            $errors[] = 'ProductVatRateCode is required';
         }
 
         if ($this->productDiscount < 0 || $this->productDiscount > 100) {
