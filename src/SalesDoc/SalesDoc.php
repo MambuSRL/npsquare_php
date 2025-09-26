@@ -80,8 +80,11 @@ class SalesDoc {
             'PaymentMethodId' => $this->PaymentMethodId,
             'ProductItems' => $productItemsArray,
             'Stakeholder' => $this->Stakeholder->toArray(),
-            'Attachments' => $this->Attachments,
-            'DatiOrdineAcquisto' => $this->DatiOrdineAcquisto->toArray()
+            'Attachments' => is_null($this->Attachments) ? null : $this->Attachments,
+            'DatiOrdineAcquisto' => is_null($this->DatiOrdineAcquisto) ? null : $this->DatiOrdineAcquisto->toArray(),
+            'DatiContratto' => is_null($this->DatiContratto) ? null : $this->DatiContratto->toArray(),
+            'DatiConvenzione' => is_null($this->DatiConvenzione) ? null : $this->DatiConvenzione->toArray(),
+            'DatiFattureCollegate' => is_null($this->DatiFattureCollegate) ? null : $this->DatiFattureCollegate->toArray(),
         ];
     }
 
@@ -141,11 +144,11 @@ class SalesDoc {
     }
 
     // Getter e Setter per Attachments
-    public function getAttachments(): array {
+    public function getAttachments(): ?array {
         return $this->Attachments;
     }
 
-    public function setAttachments(array $Attachments): self {
+    public function setAttachments(?array $Attachments): self {
         $this->Attachments = $Attachments;
         return $this;
     }
@@ -197,12 +200,42 @@ class SalesDoc {
     }
 
     // Getter e Setter per DatiOrdineAcquisto
-    public function getDatiOrdineAcquisto(): DatiAggiuntiviFatturazione {
+    public function getDatiOrdineAcquisto(): ?DatiAggiuntiviFatturazione {
         return $this->DatiOrdineAcquisto;
     }
 
-    public function setDatiOrdineAcquisto(DatiAggiuntiviFatturazione $DatiOrdineAcquisto): self {
+    public function setDatiOrdineAcquisto(?DatiAggiuntiviFatturazione $DatiOrdineAcquisto): self {
         $this->DatiOrdineAcquisto = $DatiOrdineAcquisto;
+        return $this;
+    }
+
+    // Getter e Setter per DatiContratto
+    public function getDatiContratto(): ?DatiAggiuntiviFatturazione {
+        return $this->DatiContratto;
+    }
+
+    public function setDatiContratto(?DatiAggiuntiviFatturazione $DatiContratto): self {
+        $this->DatiContratto = $DatiContratto;
+        return $this;
+    }
+
+    // Getter e Setter per DatiConvenzione
+    public function getDatiConvenzione(): ?DatiAggiuntiviFatturazione {
+        return $this->DatiConvenzione;
+    }
+
+    public function setDatiConvenzione(?DatiAggiuntiviFatturazione $DatiConvenzione): self {
+        $this->DatiConvenzione = $DatiConvenzione;
+        return $this;
+    }
+
+    // Getter e Setter per DatiFattureCollegate
+    public function getDatiFattureCollegate(): ?DatiAggiuntiviFatturazione {
+        return $this->DatiFattureCollegate;
+    }
+
+    public function setDatiFattureCollegate(?DatiAggiuntiviFatturazione $DatiFattureCollegate): self {
+        $this->DatiFattureCollegate = $DatiFattureCollegate;
         return $this;
     }
 
