@@ -14,7 +14,7 @@ class SalesDoc {
     
     private string $Type;
     private string $Date;
-    private ?int $PaymentId;
+    private ?string $PaymentId;
     private ?int $PaymentMethodId;
     private ?float $StampDutyAmount;
     private ?string $Notes;
@@ -151,11 +151,11 @@ class SalesDoc {
     }
 
     // Getter e Setter per PaymentId
-    public function getPaymentId(): ?int {
+    public function getPaymentId(): ?string {
         return $this->PaymentId;
     }
 
-    public function setPaymentId(?int $PaymentId): self {
+    public function setPaymentId(?string $PaymentId): self {
         $this->PaymentId = $PaymentId;
         return $this;
     }
