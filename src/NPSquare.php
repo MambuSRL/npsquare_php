@@ -198,6 +198,22 @@ final class NPSquare {
         if (empty($this->access_token)) 
             throw new \Exception("Missing access token");
 
+        // Validazione locale del documento prima dell'invio
+        if (!$doc->isValid()) {
+            $localErrors = $doc->validate();
+            throw new Exceptions\ValidationException(
+                "Document validation failed locally",
+                array_map(function($error) {
+                    return [
+                        'loc' => ['local_validation'],
+                        'msg' => $error,
+                        'type' => 'local_validation_error'
+                    ];
+                }, $localErrors),
+                json_encode(['local_errors' => $localErrors])
+            );
+        }
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -210,7 +226,7 @@ final class NPSquare {
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>json_encode($doc->toArray()),
+            CURLOPT_POSTFIELDS => json_encode($doc->toArray()),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
                 'Authorization: Bearer ' . $this->access_token
@@ -227,8 +243,47 @@ final class NPSquare {
                 return json_decode($response);
             case 401:
                 throw new \Exception("Unauthorized");
+            case 404:
+                throw new \Exception("Not Found");
+            case 422:
+                return $this->handleValidationError($response);
             default:
-                throw new \Exception("Unexpected error");
+                throw new \Exception("Unexpected error (HTTP $code): $response");
         }
+    }
+
+    private function handleValidationError(string $response): void
+    {
+        $responseData = json_decode($response, true);
+        
+        if (!$responseData || !isset($responseData['detail'])) {
+            throw new Exceptions\ValidationException(
+                "Validation error with invalid response format",
+                [],
+                $response
+            );
+        }
+
+        $validationErrors = [];
+        $errorMessages = [];
+
+        foreach ($responseData['detail'] as $error) {
+            $validationErrors[] = [
+                'loc' => $error['loc'] ?? ['unknown'],
+                'msg' => $error['msg'] ?? 'Unknown error',
+                'type' => $error['type'] ?? 'unknown_type'
+            ];
+            
+            $location = is_array($error['loc']) ? implode(' -> ', $error['loc']) : $error['loc'];
+            $errorMessages[] = "Field '{$location}': " . ($error['msg'] ?? 'Unknown error');
+        }
+
+        $mainMessage = "Server validation failed with " . count($validationErrors) . " error(s):\n" . implode("\n", $errorMessages);
+
+        throw new Exceptions\ValidationException(
+            $mainMessage,
+            $validationErrors,
+            $response
+        );
     }
 }
