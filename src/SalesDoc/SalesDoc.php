@@ -21,11 +21,11 @@ class SalesDoc {
     private bool $IsPaid = false;
     private array $ProductItems;
     private Stakeholder $Stakeholder;
-    private DatiAggiuntiviFatturazione $DatiOrdineAcquisto;
-    private DatiAggiuntiviFatturazione $DatiContratto;
-    private DatiAggiuntiviFatturazione $DatiConvenzione;
-    private DatiAggiuntiviFatturazione $DatiFattureCollegate;
-    private array $Attachments;
+    private ?DatiAggiuntiviFatturazione $DatiOrdineAcquisto;
+    private ?DatiAggiuntiviFatturazione $DatiContratto;
+    private ?DatiAggiuntiviFatturazione $DatiConvenzione;
+    private ?DatiAggiuntiviFatturazione $DatiFattureCollegate;
+    private ?array $Attachments;
 
     public function __construct(array $data = []) {
         if (!empty($data)) {
