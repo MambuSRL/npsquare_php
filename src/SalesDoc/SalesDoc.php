@@ -32,7 +32,7 @@ class SalesDoc {
         $this->Type = '';
         $this->Date = '';
         $this->ProductItems = [];
-        
+
         if (!empty($data)) {
             $this->fromArray($data);
         }
@@ -118,10 +118,10 @@ class SalesDoc {
             'ProductItems' => $productItemsArray,
             'Stakeholder' => $this->Stakeholder->toArray(),
             'Attachments' => is_null($this->Attachments) ? null : $this->Attachments,
-            'DatiOrdineAcquisto' => is_null($this->DatiOrdineAcquisto) ? null : $this->DatiOrdineAcquisto->toArray(),
-            'DatiContratto' => is_null($this->DatiContratto) ? null : $this->DatiContratto->toArray(),
-            'DatiConvenzione' => is_null($this->DatiConvenzione) ? null : $this->DatiConvenzione->toArray(),
-            'DatiFattureCollegate' => is_null($this->DatiFattureCollegate) ? null : $this->DatiFattureCollegate->toArray(),
+            'DatiOrdineAcquisto' => is_null($this->DatiOrdineAcquisto) ? (object)[] : $this->DatiOrdineAcquisto->toArray(),
+            'DatiContratto' => is_null($this->DatiContratto) ? (object)[] : $this->DatiContratto->toArray(),
+            'DatiConvenzione' => is_null($this->DatiConvenzione) ? (object)[] : $this->DatiConvenzione->toArray(),
+            'DatiFattureCollegate' => is_null($this->DatiFattureCollegate) ? (object)[] : $this->DatiFattureCollegate->toArray(),
         ];
     }
 
@@ -245,7 +245,7 @@ class SalesDoc {
         $this->DatiOrdineAcquisto = $DatiOrdineAcquisto;
         return $this;
     }
-
+    
     // Getter e Setter per DatiContratto
     public function getDatiContratto(): ?DatiAggiuntiviFatturazione {
         return $this->DatiContratto;
