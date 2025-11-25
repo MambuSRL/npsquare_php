@@ -19,7 +19,7 @@ class ProductItem {
     private float $productDiscount;
     private ?string $codiceSottoconto;
     private ?string $codiceCentroRicavo;
-    private ?string $effectiveData;
+    private ?string $effectiveDate;
     private ?CodiceArticolo $codiceArticolo;
     private ?AltriDatiGestionali $altriDatiGestionali;
 
@@ -31,7 +31,7 @@ class ProductItem {
         float $productDiscount = 0.0,
         ?string $codiceSottoconto = null,
         ?string $codiceCentroRicavo = null,
-        ?string $effectiveData = null,
+        ?string $effectiveDate = null,
         ?CodiceArticolo $codiceArticolo = null, // CORREZIONE: da ?string a ?CodiceArticolo
         ?AltriDatiGestionali $altriDatiGestionali = null
     ) {
@@ -42,7 +42,7 @@ class ProductItem {
         $this->productDiscount = $productDiscount;
         $this->codiceSottoconto = $codiceSottoconto;
         $this->codiceCentroRicavo = $codiceCentroRicavo;
-        $this->effectiveData = $effectiveData;
+        $this->effectiveDate = $effectiveDate;
         $this->codiceArticolo = $codiceArticolo;
         $this->altriDatiGestionali = $altriDatiGestionali;
     }
@@ -57,7 +57,7 @@ class ProductItem {
             $data['ProductDiscount'] ?? 0.0,
             $data['CodiceSottoconto'] ?? null,
             $data['CodiceCentroRicavo'] ?? null,
-            $data['EffectiveData'] ?? null,
+            $data['EffectiveDate'] ?? null,
             isset($data['CodiceArticolo']) && is_array($data['CodiceArticolo']) ? CodiceArticolo::fromArray($data['CodiceArticolo']) : null,
             isset($data['AltriDatiGestionali']) && is_array($data['AltriDatiGestionali']) ? AltriDatiGestionali::fromArray($data['AltriDatiGestionali']) : null
         );
@@ -83,7 +83,7 @@ class ProductItem {
             'ProductDiscount' => $this->productDiscount,
             'CodiceSottoconto' => $this->codiceSottoconto,
             'CodiceCentroRicavo' => $this->codiceCentroRicavo,
-            'EffectiveData' => $this->effectiveData,
+            'EffectiveDate' => $this->effectiveDate,
             'CodiceArticolo' => $this->codiceArticolo ? $this->codiceArticolo->toArray() : null,
             'AltriDatiGestionali' => $this->altriDatiGestionali ? $this->altriDatiGestionali->toArray() : null
         ];
@@ -164,13 +164,13 @@ class ProductItem {
         return $this;
     }
 
-    // Getter e Setter per EffectiveData
-    public function getEffectiveData(): ?string {
-        return $this->effectiveData;
+    // Getter e Setter per EffectiveDate
+    public function getEffectiveDate(): ?string {
+        return $this->effectiveDate;
     }
 
-    public function setEffectiveData(?string $effectiveData): self {
-        $this->effectiveData = $effectiveData;
+    public function setEffectiveDate(?string $effectiveDate): self {
+        $this->effectiveDate = $effectiveDate;
         return $this;
     }
 
