@@ -118,7 +118,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/reference-data/payment-methods?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_URL => $this->url . '/reference-data/payment-methods?keyInstitution=' . $this->keyInstitution . '&page=1&size=9999',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -159,7 +159,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/reference-data/cost-centers?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_URL => $this->url . '/reference-data/cost-centers?keyInstitution=' . $this->keyInstitution . '&page=1&size=9999',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -200,7 +200,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/reference-data/sub-accounts?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_URL => $this->url . '/reference-data/sub-accounts?keyInstitution=' . $this->keyInstitution . '&page=1&size=9999',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -241,7 +241,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/documents/types?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_URL => $this->url . '/documents/types?keyInstitution=' . $this->keyInstitution . '&page=1&size=9999',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -282,7 +282,7 @@ final class NPSquare {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->url . '/reference-data/vat-rates?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_URL => $this->url . '/reference-data/vat-rates?keyInstitution=' . $this->keyInstitution . '&page=1&size=9999',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
