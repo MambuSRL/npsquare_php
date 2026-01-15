@@ -17,7 +17,7 @@ class SubAccounts
     private string $description;
 
     public function __construct(
-        string $id = 0,
+        string $id = '',
         string $description = ''
     ) {
         $this->id = $id;
@@ -28,7 +28,7 @@ class SubAccounts
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['id'] ?? 0,
+            $data['id'] ?? '',
             $data['description'] ?? ''
         );
     }
@@ -89,8 +89,8 @@ class SubAccounts
     {
         $errors = [];
 
-        if ($this->id <= 0) {
-            $errors[] = 'Id must be greater than 0';
+        if (empty($this->id)) {
+            $errors[] = 'Id is required';
         }
 
         if (empty($this->description)) {
