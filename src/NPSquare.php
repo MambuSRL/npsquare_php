@@ -153,6 +153,129 @@ final class NPSquare {
         }
     }
 
+    public function get_cost_centers(): mixed{
+        if (empty($this->access_token)) 
+            throw new \Exception("Missing access token");
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->url . '/reference-data/cost-centers?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $this->access_token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+        switch ($code){
+            case 200:
+                $data = json_decode($response, true);
+                $costCenters = [];
+                
+                foreach ($data['items'] as $item) {
+                    $costCenters[] = ReferenceData\CostCenters::fromArray($item);
+                }
+                
+                return $costCenters;
+            case 401:
+                throw new \Exception("Unauthorized");
+            default:
+                throw new \Exception("Unexpected error");
+        }
+    }
+
+    public function get_sub_accounts(): mixed{
+        if (empty($this->access_token)) 
+            throw new \Exception("Missing access token");
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->url . '/reference-data/sub-accounts?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $this->access_token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+        switch ($code){
+            case 200:
+                $data = json_decode($response, true);
+                $subAccounts = [];
+                
+                foreach ($data['items'] as $item) {
+                    $subAccounts[] = ReferenceData\SubAccounts::fromArray($item);
+                }
+                
+                return $subAccounts;
+            case 401:
+                throw new \Exception("Unauthorized");
+            default:
+                throw new \Exception("Unexpected error");
+        }
+    }
+
+    public function get_document_types(): mixed{
+        if (empty($this->access_token)) 
+            throw new \Exception("Missing access token");
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->url . '/documents/types?keyInstitution=' . $this->keyInstitution . '&page=1&size=100',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $this->access_token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+        switch ($code){
+            case 200:
+                $data = json_decode($response, true);
+                $documentTypes = [];
+                
+                foreach ($data['items'] as $item) {
+                    $documentTypes[] = ReferenceData\DocumentTypes::fromArray($item);
+                }
+                
+                return $documentTypes;
+            case 401:
+                throw new \Exception("Unauthorized");
+            default:
+                throw new \Exception("Unexpected error");
+        }
+    }
+
     public function get_vat_rates(): mixed{
         if (empty($this->access_token)) 
             throw new \Exception("Missing access token");
