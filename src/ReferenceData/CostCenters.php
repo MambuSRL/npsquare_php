@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace Mambusrl\npsquare_php\ReferenceData;
 class CostCenters
 {
-    private int $id;
+    private string $id;
     private string $description;
 
     public function __construct(
-        int $id = 0,
+        string $id = 0,
         string $description = ''
     ) {
         $this->id = $id;
@@ -59,13 +59,13 @@ class CostCenters
         return json_encode($this->toArray(), JSON_PRETTY_PRINT);
     }
     // Getter per Id
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     // Setter per Id
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
         return $this;
