@@ -12,7 +12,8 @@ declare(strict_types=1);
 namespace Mambusrl\npsquare_php\SalesDoc;
 class SalesDoc {
     
-    private string $Type;
+    private ?string $Type;
+    private ?string $TypeCode;
     private string $Date;
     private ?string $PaymentId;
     private ?int $PaymentMethodId;
@@ -29,7 +30,8 @@ class SalesDoc {
 
     public function __construct(array $data = []) {
         // Inizializzare le proprietà obbligatorie
-        $this->Type = '';
+        $this->Type = null;
+        $this->TypeCode = null;
         $this->Date = '';
         $this->ProductItems = [];
 
@@ -40,7 +42,8 @@ class SalesDoc {
 
     // Metodo per creare l'oggetto da array/JSON
     public function fromArray(array $data): self {
-        $this->Type = $data['Type'] ?? '';
+        $this->Type = $data['Type'] ?? null;
+        $this->TypeCode = $data['TypeCode'] ?? null;
         $this->Date = $data['Date'] ?? '';
         $this->StampDutyAmount = $data['StampDutyAmount'] ?? null;
         $this->Notes = $data['Notes'] ?? null;
@@ -109,6 +112,7 @@ class SalesDoc {
         }
         return [
             'Type' => $this->Type,
+            'TypeCode' => $this->TypeCode,
             'Date' => $this->Date,
             'StampDutyAmount' => $this->StampDutyAmount,
             'Notes' => $this->Notes,
@@ -131,12 +135,22 @@ class SalesDoc {
     }
 
     // Getter e Setter per Type
-    public function getType(): string {
+    public function getType(): ?string {
         return $this->Type;
     }
 
-    public function setType(string $type): self {
+    public function setType(?string $type): self {
         $this->Type = $type;
+        return $this;
+    }
+
+    // Getter e Setter per TypeCode
+    public function getTypeCode(): ?string {
+        return $this->TypeCode;
+    }
+
+    public function setTypeCode(?string $typeCode): self {
+        $this->TypeCode = $typeCode;
         return $this;
     }
 
