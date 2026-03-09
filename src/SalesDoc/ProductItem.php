@@ -16,7 +16,9 @@ class ProductItem {
     private string $productDescription;
     private float $unitProductPrice;
     private ?string $productVatRateCode;
-    private float $productDiscount;
+    private ?float $productDiscount;
+
+    private ?float $productDiscountFixed;
     private ?string $codiceSottoconto;
     private ?string $codiceCentroRicavo;
     private ?string $effectiveDate;
@@ -28,7 +30,8 @@ class ProductItem {
         string $productDescription = '',
         float $unitProductPrice = 0.0,
         ?string $productVatRateCode = null,
-        float $productDiscount = 0.0,
+        ?float $productDiscount = null,
+        ?float $productDiscountFixed = null,
         ?string $codiceSottoconto = null,
         ?string $codiceCentroRicavo = null,
         ?string $effectiveDate = null,
@@ -40,6 +43,7 @@ class ProductItem {
         $this->unitProductPrice = $unitProductPrice;
         $this->productVatRateCode = $productVatRateCode;
         $this->productDiscount = $productDiscount;
+        $this->productDiscountFixed = $productDiscountFixed;
         $this->codiceSottoconto = $codiceSottoconto;
         $this->codiceCentroRicavo = $codiceCentroRicavo;
         $this->effectiveDate = $effectiveDate;
@@ -54,7 +58,8 @@ class ProductItem {
             $data['ProductDescription'] ?? '',
             $data['UnitProductPrice'] ?? 0.0,
             $data['ProductVatRateCode'] ?? null,
-            $data['ProductDiscount'] ?? 0.0,
+            $data['ProductDiscount'] ?? null,
+            $data['ProductDiscountFixed'] ?? null,
             $data['CodiceSottoconto'] ?? null,
             $data['CodiceCentroRicavo'] ?? null,
             $data['EffectiveDate'] ?? null,
@@ -81,6 +86,7 @@ class ProductItem {
             'UnitProductPrice' => $this->unitProductPrice,
             'ProductVatRateCode' => $this->productVatRateCode,
             'ProductDiscount' => $this->productDiscount,
+            'ProductDiscountFixed' => $this->productDiscountFixed,
             'CodiceSottoconto' => $this->codiceSottoconto,
             'CodiceCentroRicavo' => $this->codiceCentroRicavo,
             'EffectiveDate' => $this->effectiveDate,
@@ -135,12 +141,21 @@ class ProductItem {
     }
 
     // Getter e Setter per ProductDiscount
-    public function getProductDiscount(): float {
+    public function getProductDiscount(): ?float {
         return $this->productDiscount;
     }
 
-    public function setProductDiscount(float $productDiscount): self {
+    public function setProductDiscount(?float $productDiscount): self {
         $this->productDiscount = $productDiscount;
+        return $this;
+    }
+
+    public function getProductDiscountFixed(): ?float {
+        return $this->productDiscountFixed;
+    }
+
+    public function setProductDiscountFixed(?float $productDiscountFixed): self {
+        $this->productDiscountFixed = $productDiscountFixed;
         return $this;
     }
 
