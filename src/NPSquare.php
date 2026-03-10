@@ -276,6 +276,54 @@ final class NPSquare {
         }
     }
 
+    public function retrive_payment_detail(array $documentIds): array
+    {
+        if (empty($this->access_token)) {
+            throw new \Exception("Missing access token");
+        }
+        $results = [];
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->url . '/documents/sales/payments?keyInstitution=' . $this->keyInstitution,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($documentIds),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $this->access_token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        switch ($code) {
+            case 200:
+                $data = json_decode($response, true);
+                if (is_array($data)) {
+                    foreach ($data as $item) {
+                        $results[] = PaymentDetails\RetrivePaymentDetail::fromArray($item);
+                    }
+                }
+                break;
+            case 401:
+                throw new \Exception("Unauthorized");
+            case 404:
+                throw new \Exception("Not Found");
+                break;
+            default:
+                throw new \Exception("Unexpected error (HTTP $code): $response");
+        }
+        return $results;
+    }
+
     public function get_vat_rates(): mixed{
         if (empty($this->access_token)) 
             throw new \Exception("Missing access token");
