@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Mambusrl\npsquare_php\SalesDoc;
 class ProductItem {
     
-    private int $productQuantity;
+    private float $productQuantity;
     private string $productDescription;
     private float $unitProductPrice;
     private ?string $productVatRateCode;
@@ -26,7 +26,7 @@ class ProductItem {
     private ?AltriDatiGestionali $altriDatiGestionali;
 
     public function __construct(
-        int $productQuantity = 1,
+        float $productQuantity = 1.0,
         string $productDescription = '',
         float $unitProductPrice = 0.0,
         ?string $productVatRateCode = null,
@@ -54,7 +54,7 @@ class ProductItem {
     // Metodo statico per creare l'oggetto da array/JSON
     public static function fromArray(array $data): self {
         return new self(
-            $data['ProductQuantity'] ?? 1,
+            $data['ProductQuantity'] ?? 1.0,
             $data['ProductDescription'] ?? '',
             $data['UnitProductPrice'] ?? 0.0,
             $data['ProductVatRateCode'] ?? null,
@@ -101,11 +101,11 @@ class ProductItem {
     }
 
     // Getter e Setter per ProductQuantity
-    public function getProductQuantity(): int {
+    public function getProductQuantity(): float {
         return $this->productQuantity;
     }
 
-    public function setProductQuantity(int $productQuantity): self {
+    public function setProductQuantity(float $productQuantity): self {
         $this->productQuantity = $productQuantity;
         return $this;
     }
